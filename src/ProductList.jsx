@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addItem } from './CartSlice';
 import './ProductList.css'
@@ -305,8 +305,10 @@ function ProductList({ onHomeClick }) {
           <button
             className="product-button"
             onClick={() => handleAddToCart(plant)} 
+            disabled={addedToCart[plant.name]}  // Disable if already added
+            style={{ backgroundColor: addedToCart[plant.name] ? 'gray' : '' }}
           >
-            Add to Cart
+            {addedToCart[plant.name] ? 'Added to Cart' : 'Add to Cart'}
           </button>
         </div>
       ))}
