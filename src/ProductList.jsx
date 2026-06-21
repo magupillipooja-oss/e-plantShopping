@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import {useSelector} from 'react-redux';
 import { addItem } from './CartSlice';
 import './ProductList.css'
 import CartItem from './CartItem';
@@ -9,6 +10,13 @@ function ProductList({ onHomeClick }) {
     const [showPlants, setShowPlants] = useState(false); 
      const [addedToCart, setAddedToCart] = useState({});
      const dispatch = useDispatch(); 
+
+    
+const cartItems = useSelector(state => state.cart.items);
+
+const calculateTotalQuantity = () => {
+  return cartItems ? cartItems.reduce((total, item) => total + item.quantity, 0) : 0;
+};
 
     const plantsArray = [
         {
@@ -281,7 +289,9 @@ function ProductList({ onHomeClick }) {
                 </div>
                 <div style={styleObjUl}>
                     <div> <a href="#" onClick={(e) => handlePlantsClick(e)} style={styleA}>Plants</a></div>
-                    <div> <a href="#" onClick={(e) => handleCartClick(e)} style={styleA}><h1 className='cart'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" id="IconChangeColor" height="68" width="68"><rect width="156" height="156" fill="none"></rect><circle cx="80" cy="216" r="12"></circle><circle cx="184" cy="216" r="12"></circle><path d="M42.3,72H221.7l-26.4,92.4A15.9,15.9,0,0,1,179.9,176H84.1a15.9,15.9,0,0,1-15.4-11.6L32.5,37.8A8,8,0,0,0,24.8,32H8" fill="none" stroke="#faf9f9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" id="mainIconPathAttribute"></path></svg></h1></a></div>
+                    <div> <a href="#" onClick={(e) => handleCartClick(e)} style={styleA}><h1 className='cart'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" id="IconChangeColor" height="68" width="68"><rect width="156" height="156" fill="none"></rect><circle cx="80" cy="216" r="12"></circle><circle cx="184" cy="216" r="12"></circle><path d="M42.3,72H221.7l-26.4,92.4A15.9,15.9,0,0,1,179.9,176H84.1a15.9,15.9,0,0,1-15.4-11.6L32.5,37.8A8,8,0,0,0,24.8,32H8" fill="none" stroke="#faf9f9" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" id="mainIconPathAttribute"></path></svg>
+                       <span style={{ fontSize: '18px', marginLeft: '5px' }}>{calculateTotalQuantity()}</span>
+                    </h1></a></div>
                 </div>
             </div>
             {!showCart ? (
@@ -305,7 +315,7 @@ function ProductList({ onHomeClick }) {
           <button
             className="product-button"
             onClick={() => handleAddToCart(plant)} 
-            disabled={addedToCart[plant.name]}  // Disable if already added
+            disabled={addedToCart[plant.name]} 
             style={{ backgroundColor: addedToCart[plant.name] ? 'gray' : '' }}
           >
             {addedToCart[plant.name] ? 'Added to Cart' : 'Add to Cart'}
